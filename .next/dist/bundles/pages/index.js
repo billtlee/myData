@@ -204,6 +204,13 @@ exports.default = _default;
 
 /***/ }),
 
+/***/ "./config/config.json":
+/***/ (function(module, exports) {
+
+module.exports = {"test":{"PORT":3000,"MONGODB_URI":"mongodb://localhost:27017/myData"},"dev":{"PORT":3000,"MONGODB_URI":"mongodb://localhost:27017/myData"},"ganache":{"MNEMONIC":"forest enough hope only coil athlete dragon cradle rookie town quiz paddle","PROVIDER_URI":"http://localhost:8545"},"rinkby":{"MNEMONIC":"forest enough hope only coil athlete dragon cradle rookie town quiz paddle","PROVIDER_URI":"https://rinkeby.infura.io/sLrsggW1D3WZZKPImuJB"}}
+
+/***/ }),
+
 /***/ "./config/contractAddress.json":
 /***/ (function(module, exports) {
 
@@ -291,6 +298,8 @@ exports.default = void 0;
 
 var _web = _interopRequireDefault(__webpack_require__("web3"));
 
+var configData = __webpack_require__("./config/config.json");
+
 var web3;
 
 if (typeof window !== 'undefined' && typeof window.web3 !== 'undefined') {
@@ -298,7 +307,7 @@ if (typeof window !== 'undefined' && typeof window.web3 !== 'undefined') {
   web3 = new _web.default(window.web3.currentProvider);
 } else {
   // we are on the server *OR* the user is not running metamask
-  var provider = new _web.default.providers.HttpProvider('https://rinkeby.infura.io/sLrsggW1D3WZZKPImuJB');
+  var provider = new _web.default.providers.HttpProvider(configData.rinkby.PROVIDER_URI);
   web3 = new _web.default(provider);
 }
 
@@ -770,7 +779,10 @@ exports.default = _default;
 "use strict";
 
 
-// import mydata from './ethereum/myData';
+var _interopRequireDefault = __webpack_require__("@babel/runtime/helpers/interopRequireDefault");
+
+var _myData = _interopRequireDefault(__webpack_require__("./ethereum/myData.js"));
+
 var routes = __webpack_require__("next-routes")();
 
 routes.add('/mydata/:address/interests', 'mydata/interests').add('/mydata/:address/privatedata', 'mydata/privatedata');

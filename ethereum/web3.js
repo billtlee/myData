@@ -1,4 +1,5 @@
 import Web3 from 'web3';
+const configData = require('../config/config.json');
 
 let web3;
 
@@ -8,7 +9,7 @@ if (typeof window !== 'undefined' && typeof window.web3 !== 'undefined') {
 } else {
   // we are on the server *OR* the user is not running metamask
   const provider = new Web3.providers.HttpProvider(
-    'https://rinkeby.infura.io/sLrsggW1D3WZZKPImuJB'
+    configData.rinkby.PROVIDER_URI
   );
   web3 = new Web3(provider);
 }
