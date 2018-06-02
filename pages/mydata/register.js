@@ -1,19 +1,27 @@
 import React, { Component } from 'react';
 import { Form, Card, Button, Message, Input, Checkbox } from 'semantic-ui-react';
+import faker from 'faker';
+import * as superagent from 'superagent';
+
 import factory from '../../ethereum/factory';
 import Layout from '../../components/Layout';
 import web3 from '../../ethereum/web3';
 import { Router } from '../../routes';
 
+const privateDataType = require('../../lib/privateData');
+const publicDataType = require('../../lib/publicData');
+let ObjectID = require('bson-objectid');
+
 class Register extends Component {
 
   state = {
-    firstName: '',
-    lastName: '',
-    mobile: '',
-    email: '',
-    location: '',
-    minPrice: '',
+    firstName: faker.name.firstName(),
+    lastName: faker.name.lastName(),
+    age: '29',
+    mobile: faker.phone.phoneNumber(),
+    email: faker.internet.email(),
+    location: faker.address.country(),
+    minPrice: '0.001',
     errorMessage: '',
     loading: false
   };
@@ -21,34 +29,72 @@ class Register extends Component {
   onSubmit = async event => {
     event.preventDefault();
 
-//    const campaign = Campaign(this.props.address);
-    const { firstName, lastName, mobile, email, minPrice, location } = this.state;
+    const { firstName, lastName, age, mobile, email, minPrice, location } = this.state;
+
+    let contractAddress;
+    const privateDataKey = new ObjectID;
+    const publicDataKey = new ObjectID;
+    const accounts = await web3.eth.getAccounts();
+
+    console.log('privateDataKey: ', privateDataKey);
+    console.log('publicDataKey: ', publicDataKey);
+    console.log('accounts[0]: ', accounts[0]);
 
     this.setState({loading: true, errorMessage: ''});
-
-    let accounts;
-
     try {
-      accounts = await web3.eth.getAccounts();
+      // create account on blockchain
       await factory.methods.createAccount(
-        web3.utils.fromAscii(firstName),
-        web3.utils.fromAscii(lastName),
-        web3.utils.fromAscii(mobile),
-        web3.utils.fromAscii(email),
-        web3.utils.fromAscii(location),
+        web3.utils.fromAscii(publicDataKey),
+        web3.utils.fromAscii(privateDataKey),
         web3.utils.toWei(minPrice, 'ether')
       ).send({
         from: accounts[0]
       });
-      Router.pushRoute('/');
+
+      //get contract address from blockchain
+      contractAddress = await factory.methods.getMyDataAddress(accounts[0]).call();
+
+      console.log('contractAddress: ', contractAddress);
+
+      const privateData = new privateDataType({
+        _id: privateDataKey,
+        contractAddress,
+        name: {
+          first: firstName,
+          last: lastName
+        },
+        age,
+        email,
+        location,
+        mobile
+      });
+
+      console.log('privateData: ', privateData);
+
+      //create private data record in database
+      await superagent.post(`http://${window.location.host}/api`, privateData).then(async res => {
+        console.log('res: ', res);
+      }).catch (err => console.error(err.stack));
+
+      const publicData = new publicDataType({
+        _id: publicData,
+        contractAddress
+      });
+
+      console.log('publicData: ', publicData);
+
+      //create public data record in database
+      await superagent.post(`http://${window.location.host}/api`, publicData).then(async res => {
+        console.log('res: ', res);
+      }).catch (err => console.error(err.stack));
+
     } catch (err) {
       this.setState({ errorMessage: err.message });
     }
-
     this.setState({loading: false});
 
-    const dataAddress = await factory.methods.getMyDataAddress(accounts[0]).call();
-//    Router.pushRoute(`/mydata/${dataAddress}/interests`);
+    // Router.pushRoute('/');
+
   }
 
   render () {
@@ -68,6 +114,13 @@ class Register extends Component {
             <Input 
               value={this.state.lastName}
               onChange={event => this.setState({lastName: event.target.value})}
+            />
+          </Form.Field>
+          <Form.Field>
+            <label>Age</label>
+            <Input 
+              value={this.state.age}
+              onChange={event => this.setState({age: event.target.value})}
             />
           </Form.Field>
           <Form.Field>
