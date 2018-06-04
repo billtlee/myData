@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import MyData from '../../ethereum/myData';
 import { Card } from 'semantic-ui-react';
+import * as superagent from 'superagent';
+
 import Layout from '../../components/Layout';
 import { Link } from '../../routes';
 import web3 from '../../ethereum/web3';
@@ -11,25 +13,31 @@ class privateData extends Component {
     const { address } = props.query;
     const myData = MyData(address);
 
-    const pdata = await myData.methods.getPrivateData().call({
-      from: accounts[0]
-    });
-
-    // var myDataEvent = myData.GetPrivateData();
-    // myDataEvent.watch(function(error, result){
-    //   if (!error)
-    //     console.log(result);
-    // });
+    let firstName = 'unauthorized';
+    let lastName = 'unauthorized';
+    let mobile = 'unauthorized';
+    let email = 'unauthorized';
+    let location = 'unauthorized';
+    let age = 'unauthorized';
 
     const accessor = await myData.methods.isApprovedAccessor(accounts[0]).call();
-    console.log(accounts[0], accessor);
-    const firstName = web3.utils.hexToAscii(pdata[0]);
-    const lastName = web3.utils.hexToAscii(pdata[1]);
-    const mobile = web3.utils.hexToAscii(pdata[2]);
-    const email = web3.utils.hexToAscii(pdata[3]);
-    const location = web3.utils.hexToAscii(await myData.methods.location().call());
 
-    return { address, firstName, lastName, mobile, email, location };
+    let privateDataKey;
+    if (accessor){
+      privateDataKey = web3.utils.hexToAscii(await myData.methods.getPrivateData().call());
+
+      const privateData = await superagent.get(`http://${window.location.host}/api/getbyid/${privateDataKey}`)
+      .then(res => res.body);
+
+      firstName = privateData[0].name.first;
+      lastName = privateData[0].name.last;
+      mobile = privateData[0].mobile;
+      email = privateData[0].email;
+      location = privateData[0].location;
+      age = privateData[0].age;
+    }
+
+    return { firstName, lastName, mobile, email, location, age };
   }
   
   renderCard() {
@@ -38,15 +46,20 @@ class privateData extends Component {
       lastName,
       mobile,
       email,
-      location
+      location,
+      age
     } = this.props;
 
-    return <Card
-      header={`${firstName} ${lastName}`}
-      meta={location}
-      description={`Mobile: ${mobile}`}
-      extra = {`email: ${email}`}
-    />
+    return <Card>
+      <Card.Content header={`${firstName} ${lastName}`}/>
+      <Card.Content meta={location}/>
+      <Card.Content description={`Age: ${age}`}/>
+      <Card.Content extra>
+        <p>Mobile: {mobile}</p>
+        <p>email: {email}</p>
+      </Card.Content>
+    </Card>
+
   }
 
   render() {
