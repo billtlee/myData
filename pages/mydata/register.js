@@ -36,16 +36,12 @@ class Register extends Component {
     const publicDataKey = new ObjectID;
     const accounts = await web3.eth.getAccounts();
 
-    console.log('privateDataKey: ', privateDataKey);
-    console.log('publicDataKey: ', publicDataKey);
-    console.log('accounts[0]: ', accounts[0]);
-
     this.setState({loading: true, errorMessage: ''});
     try {
       // create account on blockchain
       await factory.methods.createAccount(
-        web3.utils.fromAscii(publicDataKey),
-        web3.utils.fromAscii(privateDataKey),
+        web3.utils.fromAscii(publicDataKey.str),
+        web3.utils.fromAscii(privateDataKey.str),
         web3.utils.toWei(minPrice, 'ether')
       ).send({
         from: accounts[0]
@@ -54,10 +50,8 @@ class Register extends Component {
       //get contract address from blockchain
       contractAddress = await factory.methods.getMyDataAddress(accounts[0]).call();
 
-      console.log('contractAddress: ', contractAddress);
-
       const privateData = new privateDataType({
-        _id: privateDataKey,
+        _id: privateDataKey.str,
         contractAddress,
         name: {
           first: firstName,
@@ -69,19 +63,18 @@ class Register extends Component {
         mobile
       });
 
-      console.log('privateData: ', privateData);
-
       //create private data record in database
       await superagent.post(`http://${window.location.host}/api`, privateData).then(async res => {
         console.log('res: ', res);
       }).catch (err => console.error(err.stack));
 
       const publicData = new publicDataType({
-        _id: publicData,
-        contractAddress
+        _id: publicDataKey.str,
+        contractAddress,
+        interests: [],
+        brands: [],
+        medicalCondition: []
       });
-
-      console.log('publicData: ', publicData);
 
       //create public data record in database
       await superagent.post(`http://${window.location.host}/api`, publicData).then(async res => {

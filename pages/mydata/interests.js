@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { Form, Card, Button, Message, Input, Checkbox } from 'semantic-ui-react';
+import * as superagent from 'superagent';
 import Layout from '../../components/Layout';
 import web3 from '../../ethereum/web3';
 import MyData from '../../ethereum/myData';
-import { keccak256 } from 'js-sha3';
 import { Router } from '../../routes';
 
 class Interests extends Component {
@@ -19,20 +19,23 @@ class Interests extends Component {
     const readOnly = !(accounts[0]===owner);
     
     const interestsConst = ["Tennis", "Golf", "Shopping", "Movie", "Hiking", "Reading", "Diving", "Investing"];
-    let interests = new Set();
 
-    for (var i=0; i<interestsConst.length; i++){
-      await myData.methods.hasInterest(interestsConst[i].toLowerCase()).call() 
-        && interests.add(interestsConst[i].toLowerCase());
-    }
+    const publicDataKey = web3.utils.hexToAscii(await myData.methods.publicDataKey().call());
+    console.log(publicDataKey);
+
+    const detail = await superagent.get(`http://${window.location.host}/api/getbyid/${publicDataKey}`)
+    .then(res => res.body);
+
+    let interests = new Set(detail[0].interests);
 
     return {
-      myData: myData,
+      myData,
       address: props.query.address,
-      interestsConst: interestsConst,
-      interests: interests,
-      readOnly: readOnly,
-      contractBalance: contractBalance
+      interestsConst,
+      interests,
+      readOnly,
+      contractBalance,
+      publicDataKey
     };
   }
 
@@ -46,28 +49,11 @@ class Interests extends Component {
   onSubmit = async event => {
     event.preventDefault();
 
-    let interestsToAdd = [...this.state.interests];
-    // let interestsToRemove = this.props.interestsConst.filter(x => !interestsToAdd.includes(x.toLowerCase()));
-    // interestsToRemove = interestsToRemove.map(function(x){return x.toLowerCase()});
-    // let tempInterestsConst = this.props.interestsConst.map(function(x){return x.toLowerCase()});
-    // let interestsToAddMap = interestsToAdd.map(function(x){return tempInterestsConst.indexOf(x)});
-    // let interestsToRemoveMap = interestsToRemove.map(function(x){return tempInterestsConst.indexOf(x)});
+    let interests = [...this.state.interests];
 
-    this.setState({loading: true, errorMessage: ''});
+    superagent.patch(`http://${window.location.host}/api/update/${this.props.publicDataKey}`, {interests}).then(async res => {
+      }).catch (err => console.error(err.stack));
 
-    try {
-      const accounts = await web3.eth.getAccounts();
-        for (var i=0; i<interestsToAdd.length; i++){
-          console.log(interestsToAdd[i]);
-          await this.props.myData.methods.setInterests(interestsToAdd[i]).send({
-            from: accounts[0] 
-          })
-        }
-      Router.pushRoute('/');
-    } catch (err) {
-      this.setState({ errorMessage: err.message })
-    }
-      this.setState({loading: false});
   }
 
   onChange = (event, data) => {

@@ -16,6 +16,7 @@ class MyDataIndex extends Component {
 
   static async getInitialProps() {
     const registeredAccounts = await factory.methods.getRegisteredAccounts().call();
+    console.log('registeredAccounts: ', registeredAccounts);
 
     let registeredAccountsCost = [];
     let displayState = [];
