@@ -4,6 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "build": "next build",
+    "heroku-postbuild": "next build",
     "test": "export NODE_ENV=test || SET\"NODE_ENV=test\" && mocha",
     "dev": "export NODE_ENV=dev || SET \"NODE_ENV=dev\" && node server.js",
     "deployGanache": "export NODE_ENV=ganache || SET\"NODE_ENV=ganache\" && node ethereum/deploy.js",
