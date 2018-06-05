@@ -38,16 +38,33 @@ class MyDataIndex extends Component {
 
   onMatch = async () => {
     let str=this.state.value.split(/[ ,]+/);
+    // let str=this.state.value.split(/(".*?"|[^"\s]+)+(?=\s*|\s*$)/g);
+    console.log("str: ", str);
     let tempMatched=[]
+    let foundAddresses=new Set();
     for (let i=0; i<str.length; i++){
       const res = await superagent.get(`http://${window.location.host}/api/findAddressByInterest/${str[i]}`)
         .then(res => res.body);
       for (let j=0; j<res.length; j++){
-        for (let k=0; k<this.state.registeredAccounts.length; k++){
-          (this.state.registeredAccounts[k] === res[j].contractAddress) && (tempMatched[k]=true);
-        }
+        foundAddresses.add(res[j].contractAddress);
+      }
+      const res1 = await superagent.get(`http://${window.location.host}/api/findAddressByBrands/${str[i]}`)
+      .then(res => res.body);
+      for (let j=0; j<res1.length; j++){
+        foundAddresses.add(res1[j].contractAddress);
+      }
+      const res2 = await superagent.get(`http://${window.location.host}/api/findAddressByMedicalCondition/${str[i]}`)
+      .then(res => res.body);
+      for (let j=0; j<res2.length; j++){
+        foundAddresses.add(res2[j].contractAddress);
       }
     }
+    console.log("foundAddresses: ", foundAddresses);
+    
+    for (let i=0; i<this.state.registeredAccounts.length; i++){
+      (foundAddresses.has(this.state.registeredAccounts[i])) && (tempMatched[i]=true);
+    }
+
     this.setState({matched: tempMatched});
   }
 
