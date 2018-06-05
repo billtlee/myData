@@ -7,7 +7,11 @@
     "test": "export NODE_ENV=test || SET\"NODE_ENV=test\" && mocha",
     "dev": "export NODE_ENV=dev || SET \"NODE_ENV=dev\" && node server.js",
     "deployGanache": "export NODE_ENV=ganache || SET\"NODE_ENV=ganache\" && node ethereum/deploy.js",
-    "deployRinkby": "export NODE_ENV=rinkby || SET\"NODE_ENV=rinkby\" && node ethereum/deploy.js"
+    "deployRinkby": "export NODE_ENV=rinkby || SET\"NODE_ENV=rinkby\" && node ethereum/deploy.js",
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": "10.1.0"
   },
   "author": "Bill Lee",
   "license": "ISC",
