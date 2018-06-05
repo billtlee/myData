@@ -1,6 +1,5 @@
 node_modules/
 yarn.lock
-config/config.json
 config/contractAddress.json
 .next/
 *.log
