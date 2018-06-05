@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { Table, Button, Message, Input } from 'semantic-ui-react';
+import * as superagent from 'superagent';
+
 import factory from '../ethereum/factory';
 import MyData from '../ethereum/myData';
 import web3 from '../ethereum/web3';
@@ -10,13 +12,13 @@ class MyDataIndex extends Component {
   state = {
     value: '',
     matched: [],
+    registeredAccounts: [],
     loading: false,
     error: ''
   }
 
-  static async getInitialProps() {
+  async componentDidMount() {
     const registeredAccounts = await factory.methods.getRegisteredAccounts().call();
-    console.log('registeredAccounts: ', registeredAccounts);
 
     let registeredAccountsCost = [];
     let displayState = [];
@@ -26,19 +28,26 @@ class MyDataIndex extends Component {
       registeredAccountsCost[i]=minPayment;
       displayState[i]=false;
     }
-    return { registeredAccounts, registeredAccountsCost, displayState };
+
+    this.setState({
+      registeredAccounts,
+      registeredAccountsCost,
+      displayState
+    });
   }
 
   onMatch = async () => {
     let str=this.state.value.split(/[ ,]+/);
     let tempMatched=[]
-    for (var i=0, acctsLen=this.props.registeredAccounts.length; i<acctsLen; i++){
-      const myData = MyData(this.props.registeredAccounts[i]);
-      for (var j=0, strLen=str.length; j<strLen; j++){
-        await myData.methods.hasInterest(str[j]).call() && (tempMatched[i]= true);
+    for (let i=0; i<str.length; i++){
+      const res = await superagent.get(`http://${window.location.host}/api/findAddressByInterest/${str[i]}`)
+        .then(res => res.body);
+      for (let j=0; j<res.length; j++){
+        for (let k=0; k<this.state.registeredAccounts.length; k++){
+          (this.state.registeredAccounts[k] === res[j].contractAddress) && (tempMatched[k]=true);
+        }
       }
     }
-    console.log(tempMatched);
     this.setState({matched: tempMatched});
   }
 
@@ -67,11 +76,11 @@ class MyDataIndex extends Component {
 
   renderRow() {
     const { Row, Cell } = Table;
-    return this.props.registeredAccounts.map((address, i) => {
+    return this.state.registeredAccounts.map((address, i) => {
         return (
           <Row active={this.state.matched[i]} key={i}>
             <Cell><Link route = {`/mydata/${address}/interests`}><a>{address}</a></Link></Cell>
-            <Cell>{this.props.registeredAccountsCost[i]}</Cell>
+            <Cell>{this.state.registeredAccountsCost[i]}</Cell>
             <Cell>
               <Button color="green" basic 
                 loading={this.state.loading} 

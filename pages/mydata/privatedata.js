@@ -23,7 +23,7 @@ class privateData extends Component {
     const accessor = await myData.methods.isApprovedAccessor(accounts[0]).call();
 
     let privateDataKey;
-    if (accessor){
+    if (accessor !== 'unauthorized'){
       privateDataKey = web3.utils.hexToAscii(await myData.methods.getPrivateData().call());
 
       const privateData = await superagent.get(`http://${window.location.host}/api/getbyid/${privateDataKey}`)
@@ -35,6 +35,13 @@ class privateData extends Component {
       email = privateData[0].email;
       location = privateData[0].location;
       age = privateData[0].age;
+    } else {
+      firstName = 'unauthorized';
+      lastName = 'unauthorized';
+      mobile = 'unauthorized';
+      email = 'unauthorized';
+      location = 'unauthorized';
+      age = 'unauthorized';
     }
 
     return { firstName, lastName, mobile, email, location, age };
