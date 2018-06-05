@@ -1,0 +1,21 @@
+{
+  "test": {
+    "PORT": 3000,
+    "MONGODB_URI": "mongodb://localhost:27017/myData"
+  },
+  "dev": {
+    "PORT": 3000,
+    "MONGODB_URI": "mongodb://localhost:27017/myData"
+  },
+  "ganache": {
+    "MNEMONIC": "forest enough hope only coil athlete dragon cradle rookie town quiz paddle",
+    "PROVIDER_URI": "http://localhost:8545",
+    "LOCATION": "ganache"
+  },
+  "rinkby": {
+    "MNEMONIC": "forest enough hope only coil athlete dragon cradle rookie town quiz paddle",
+    "PROVIDER_URI": "https://rinkeby.infura.io/sLrsggW1D3WZZKPImuJB",
+    "LOCATION": "rinkby",
+    "CONTRACTADDRESS": "0x600b3ABc0d043a7621E9b158029C9Ea64e94a477"
+  }
+}
