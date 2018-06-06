@@ -26,7 +26,7 @@ class privateData extends Component {
     if (accessor !== 'unauthorized'){
       privateDataKey = web3.utils.hexToAscii(await myData.methods.getPrivateData().call());
 
-      const privateData = await superagent.get(`https://${window.location.host}/api/getbyid/${privateDataKey}`)
+      const privateData = await superagent.get(`http://${window.location.host}/api/getbyid/${privateDataKey}`)
       .then(res => res.body);
 
       firstName = privateData[0].name.first;

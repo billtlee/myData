@@ -24,7 +24,7 @@ class Interests extends Component {
 
     const publicDataKey = web3.utils.hexToAscii(await myData.methods.publicDataKey().call());
 
-    const detail = await superagent.get(`https://${window.location.host}/api/getbyid/${publicDataKey}`)
+    const detail = await superagent.get(`http://${window.location.host}/api/getbyid/${publicDataKey}`)
     .then(res => res.body);
 
     console.log("detail: ", detail[0]);
@@ -64,13 +64,13 @@ class Interests extends Component {
     let brands = [...this.state.brands];
     let medicalCondition = [...this.state.medicalCondition];
 
-    superagent.patch(`https://${window.location.host}/api/update/${this.props.publicDataKey}`, {interests}).then(async res => {
+    superagent.patch(`http://${window.location.host}/api/update/${this.props.publicDataKey}`, {interests}).then(async res => {
       }).catch (err => console.error(err.stack));
 
-      superagent.patch(`https://${window.location.host}/api/update/${this.props.publicDataKey}`, {brands}).then(async res => {
+      superagent.patch(`http://${window.location.host}/api/update/${this.props.publicDataKey}`, {brands}).then(async res => {
       }).catch (err => console.error(err.stack));  
 
-      superagent.patch(`https://${window.location.host}/api/update/${this.props.publicDataKey}`, {medicalCondition}).then(async res => {
+      superagent.patch(`http://${window.location.host}/api/update/${this.props.publicDataKey}`, {medicalCondition}).then(async res => {
       }).catch (err => console.error(err.stack));
   }
 
