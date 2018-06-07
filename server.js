@@ -19,7 +19,7 @@ co(function* () {
 
   const client =  yield MongoClient.connect(process.env.MONGODB_URI, {useNewUrlParser: true});
   const db = client.db('myData');
-
+  console.log('client: ', client);
   console.log('db: ', db);
   const server = express();
   server.use(sslRedirect());
