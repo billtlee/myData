@@ -22,10 +22,13 @@ class privateData extends Component {
 
     const accessor = await myData.methods.isApprovedAccessor(accounts[0]).call();
 
-    let privateDataKey;
     if (accessor){
-      privateDataKey = web3.utils.hexToAscii(await myData.methods.getPrivateData().call());
-
+      let privateDataKey;
+      privateDataKey = await myData.methods.getPrivateData().call();
+      console.log(privateDataKey);
+      privateDataKey = web3.utils.hexToAscii(privateDataKey);
+      console.log(privateDataKey);
+      
       const curLocation = window.location;
 
       const privateData = await superagent.get(`${curLocation.protocol}//${curLocation.host}/api/getbyid/${privateDataKey}`)
