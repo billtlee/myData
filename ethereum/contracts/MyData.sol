@@ -56,11 +56,8 @@ contract MyData {
         return (approvedAccessors[accessor]);
     }
 
-    function getPrivateData() public returns (bytes32) {
+    function getPrivateData() public view returns (bytes32) {
         if (approvedAccessors[msg.sender] == true) {
-            if (msg.sender != owner) {
-                approvedAccessors[msg.sender] = false;
-            }
             return (privateDataKey);
         } else {
             return ("unauthorized");

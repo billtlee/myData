@@ -42,18 +42,19 @@ class MyDataIndex extends Component {
     console.log("str: ", str);
     let tempMatched=[]
     let foundAddresses=new Set();
+    const curLocation = window.location;
     for (let i=0; i<str.length; i++){
-      const res = await superagent.get(`${window.location.protocol}://${window.location.host}/api/findAddressByInterest/${str[i]}`)
+      const res = await superagent.get(`${curLocation.protocol}//${curLocation.host}/api/findAddressByInterest/${str[i]}`)
         .then(res => res.body);
       for (let j=0; j<res.length; j++){
         foundAddresses.add(res[j].contractAddress);
       }
-      const res1 = await superagent.get(`${window.location.protocol}://${window.location.host}/api/findAddressByBrands/${str[i]}`)
+      const res1 = await superagent.get(`${curLocation.protocol}//${curLocation.host}/api/findAddressByBrands/${str[i]}`)
       .then(res => res.body);
       for (let j=0; j<res1.length; j++){
         foundAddresses.add(res1[j].contractAddress);
       }
-      const res2 = await superagent.get(`${window.location.protocol}://${window.location.host}/api/findAddressByMedicalCondition/${str[i]}`)
+      const res2 = await superagent.get(`${curLocation.protocol}//${curLocation.host}/api/findAddressByMedicalCondition/${str[i]}`)
       .then(res => res.body);
       for (let j=0; j<res2.length; j++){
         foundAddresses.add(res2[j].contractAddress);

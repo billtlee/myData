@@ -1,5 +1,3 @@
-// import mydata from './ethereum/myData';
-
 const routes = require('next-routes')();
 
 routes

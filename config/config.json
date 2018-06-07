@@ -5,7 +5,7 @@
   },
   "dev": {
     "PORT": 3000,
-    "MONGODB_URI": "mongodb://localhost:27017/myData"
+    "MONGODB_URI": "mongodb://heroku_w8j14h7r:roj0a9hs84oh1b3i4j549soqom@ds155651.mlab.com:55651/heroku_w8j14h7r"
   },
   "ganache": {
     "MNEMONIC": "forest enough hope only coil athlete dragon cradle rookie town quiz paddle",

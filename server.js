@@ -1,7 +1,6 @@
 require('./config/config');
 const port = process.env.PORT;
 const { MongoClient } = require('mongodb');
-const sslRedirect = require('heroku-ssl-redirect');
 const api = require('./lib/api');
 const next = require('next');
 const app = next({
@@ -18,10 +17,10 @@ co(function* () {
   yield app.prepare();
 
   const client =  yield MongoClient.connect(process.env.MONGODB_URI, {useNewUrlParser: true});
-  const db = client.db('myData');
+  // const db = client.db('myData');
+  const db = client.db('heroku_w8j14h7r');
 
   const server = express();
-  server.use(sslRedirect());
   server.use(body.json());
   server.use((req, res, next) => {
     req.mongodburi = process.env.MONGODB_URI;

@@ -24,7 +24,8 @@ class Interests extends Component {
 
     const publicDataKey = web3.utils.hexToAscii(await myData.methods.publicDataKey().call());
 
-    const detail = await superagent.get(`${window.location.protocol}://${window.location.host}/api/getbyid/${publicDataKey}`)
+    const curLocation = window.location;
+    const detail = await superagent.get(`${curLocation.protocol}//${curLocation.host}/api/getbyid/${publicDataKey}`)
     .then(res => res.body);
 
     console.log("detail: ", detail[0]);
@@ -64,13 +65,15 @@ class Interests extends Component {
     let brands = [...this.state.brands];
     let medicalCondition = [...this.state.medicalCondition];
 
-    superagent.patch(`${window.location.protocol}://${window.location.host}/api/update/${this.props.publicDataKey}`, {interests}).then(async res => {
+    const curLocation = window.location;
+
+    superagent.patch(`${curLocation.protocol}//${curLocation.host}/api/update/${this.props.publicDataKey}`, {interests}).then(async res => {
       }).catch (err => console.error(err.stack));
 
-      superagent.patch(`${window.location.protocol}://${window.location.host}/api/update/${this.props.publicDataKey}`, {brands}).then(async res => {
+      superagent.patch(`${curLocation.protocol}//${curLocation.host}/api/update/${this.props.publicDataKey}`, {brands}).then(async res => {
       }).catch (err => console.error(err.stack));  
 
-      superagent.patch(`${window.location.protocol}://${window.location.host}/api/update/${this.props.publicDataKey}`, {medicalCondition}).then(async res => {
+      superagent.patch(`${curLocation.protocol}//${curLocation.host}/api/update/${this.props.publicDataKey}`, {medicalCondition}).then(async res => {
       }).catch (err => console.error(err.stack));
   }
 

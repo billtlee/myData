@@ -63,8 +63,9 @@ class Register extends Component {
         mobile
       });
 
+      const curLocation = window.location;
       //create private data record in database
-      await superagent.post(`${window.location.protocol}://${window.location.host}/api`, privateData).then(async res => {
+      await superagent.post(`${curLocation.protocol}//${curLocation.host}/api`, privateData).then(async res => {
         console.log('res: ', res);
       }).catch (err => console.error(err.stack));
 
@@ -77,7 +78,7 @@ class Register extends Component {
       });
 
       //create public data record in database
-      await superagent.post(`${window.location.protocol}://${window.location.host}/api`, publicData).then(async res => {
+      await superagent.post(`${curLocation.protocol}//${curLocation.host}/api`, publicData).then(async res => {
         console.log('res: ', res);
       }).catch (err => console.error(err.stack));
 
