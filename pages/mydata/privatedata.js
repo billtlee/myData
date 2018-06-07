@@ -24,11 +24,13 @@ class privateData extends Component {
 
     if (accessor){
       let privateDataKey;
-      privateDataKey = await myData.methods.getPrivateData().call();
+      privateDataKey = await myData.methods.getPrivateData().call({
+        from: accounts[0]
+      });
       console.log(privateDataKey);
       privateDataKey = web3.utils.hexToAscii(privateDataKey);
       console.log(privateDataKey);
-      
+
       const curLocation = window.location;
 
       const privateData = await superagent.get(`${curLocation.protocol}//${curLocation.host}/api/getbyid/${privateDataKey}`)
