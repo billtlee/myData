@@ -23,12 +23,9 @@ class privateData extends Component {
     const accessor = await myData.methods.isApprovedAccessor(accounts[0]).call();
 
     if (accessor){
-      let privateDataKey;
-      privateDataKey = await myData.methods.getPrivateData().call({
+      const privateDataKey = web3.utils.hexToAscii(await myData.methods.getPrivateData().call({
         from: accounts[0]
-      });
-      console.log(privateDataKey);
-      privateDataKey = web3.utils.hexToAscii(privateDataKey);
+      }));
       console.log(privateDataKey);
 
       const curLocation = window.location;
