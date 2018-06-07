@@ -17,10 +17,11 @@ const body = require('body-parser');
 co(function* () {
   yield app.prepare();
 
-  const client =  yield MongoClient.connect(process.env.MONGODB_URI, {useNewUrlParser: true});
-  const db = client.db('myData');
-  console.log('client: ', client);
-  console.log('db: ', db);
+  // const client =  yield MongoClient.connect(process.env.MONGODB_URI, {useNewUrlParser: true});
+  // const db = client.db('myData');
+
+  const db =  yield MongoClient.connect(process.env.MONGODB_URI, {useNewUrlParser: true});
+
   const server = express();
   server.use(sslRedirect());
   server.use(body.json());
