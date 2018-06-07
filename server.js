@@ -20,8 +20,7 @@ co(function* () {
   const client =  yield MongoClient.connect(process.env.MONGODB_URI, {useNewUrlParser: true});
   const db = client.db('myData');
   try {
-    const res = await db.collection('myData').insertOne({test: 'test'});
-    console.log('res, ', res);
+    db.collection('myData').insertOne({test: 'test'});
   } catch (error) {
     console.error(err.stack);
   }
