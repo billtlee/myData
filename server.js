@@ -19,11 +19,8 @@ co(function* () {
 
   const client =  yield MongoClient.connect(process.env.MONGODB_URI, {useNewUrlParser: true});
   const db = client.db('myData');
-  try {
-    db.collection('myData').insertOne({test: 'test'});
-  } catch (error) {
-    console.error(err.stack);
-  }
+
+  console.log('db: ', db);
   const server = express();
   server.use(sslRedirect());
   server.use(body.json());
