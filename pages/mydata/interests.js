@@ -70,10 +70,10 @@ class Interests extends Component {
     superagent.patch(`${curLocation.protocol}//${curLocation.host}/api/update/${this.props.publicDataKey}`, {interests}).then(async res => {
       }).catch (err => console.error(err.stack));
 
-      superagent.patch(`${curLocation.protocol}//${curLocation.host}/api/update/${this.props.publicDataKey}`, {brands}).then(async res => {
+    superagent.patch(`${curLocation.protocol}//${curLocation.host}/api/update/${this.props.publicDataKey}`, {brands}).then(async res => {
       }).catch (err => console.error(err.stack));  
 
-      superagent.patch(`${curLocation.protocol}//${curLocation.host}/api/update/${this.props.publicDataKey}`, {medicalCondition}).then(async res => {
+    superagent.patch(`${curLocation.protocol}//${curLocation.host}/api/update/${this.props.publicDataKey}`, {medicalCondition}).then(async res => {
       }).catch (err => console.error(err.stack));
   }
 

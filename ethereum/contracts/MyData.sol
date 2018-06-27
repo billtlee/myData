@@ -23,6 +23,8 @@ contract MyDataFactory {
 
 
 contract MyData {
+    event DataAccessed(address accessor);
+    event ReceivedPayment(uint payment, address fromAcct);
 
     uint public minimumPayment;
     address public owner;
@@ -47,8 +49,13 @@ contract MyData {
         minimumPayment = _minimumPayment;    
     }
     
+    function transferBalanceToOwner() public restricted {
+        owner.transfer(address(this).balance);
+    }
+
     function getAccess() public payable {
         require(msg.value >= minimumPayment);
+        emit ReceivedPayment(msg.value, msg.sender);
         approvedAccessors[msg.sender] = true;
     }
     
@@ -56,8 +63,9 @@ contract MyData {
         return (approvedAccessors[accessor]);
     }
 
-    function getPrivateData() public view returns (bytes32) {
+    function getPrivateData() public returns (bytes32) {
         if (approvedAccessors[msg.sender] == true) {
+            emit DataAccessed(msg.sender);
             return (privateDataKey);
         } else {
             return ("unauthorized");
