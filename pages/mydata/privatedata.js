@@ -10,107 +10,102 @@ import web3 from '../../ethereum/web3';
 
 class privateData extends Component {
   state = {
-    contractBalance: this.props.contractBalance,
+    privateData: {
+      firstName: '',
+      lastName: '',
+      mobile: '',
+      email: '',
+      location: '',
+      age: ''
+    },
+    isOwner: false,
+    contractBalance: '',
     errorMessage: '',
     loading: false
   }
 
-  static async getInitialProps(props) {
-    const accounts = await web3.eth.getAccounts();
-    const { address } = props.query;
+  static getInitialProps(props) {
+    const address = props.query.address;
+    const privateDataKey = props.query.key;
+    let accessor;
+    privateDataKey==='unauthorized' ? accessor = false : accessor = true;
     const myData = MyData(address);
     const myDataSocks = MyDataSocks(address);
 
-    let firstName = 'unauthorized';
-    let lastName = 'unauthorized';
-    let mobile = 'unauthorized';
-    let email = 'unauthorized';
-    let location = 'unauthorized';
-    let age = 'unauthorized';
+    return { myDataSocks, myData, address, privateDataKey, accessor };
+  }
+  
+  async componentDidMount () {
+    let {myData, myDataSocks, address, privateDataKey, accessor} = this.props;
+
+    const accounts = await web3.eth.getAccounts();
 
     let contractBalance;
-    await web3.eth.getBalance(props.query.address).then(function(result) {
+    await web3.eth.getBalance(address).then(function(result) {
       contractBalance = web3.utils.fromWei(result);
     });
 
     const owner = await myData.methods.owner().call();
     const isOwner = owner === accounts[0];
-    const accessor = await myData.methods.isApprovedAccessor(accounts[0]).call();
+
+    this.setState({
+      contractBalance,
+      isOwner
+    });
 
     if (accessor){
-      const privateDataKey = web3.utils.hexToAscii(await myData.methods.getPrivateData().call({
-        from: accounts[0]
-      }));
-
       const curLocation = window.location;
 
       const privateData = await superagent.get(`${curLocation.protocol}//${curLocation.host}/api/getbyid/${privateDataKey}`)
       .then(res => res.body);
       
-      firstName = privateData[0].name.first;
-      lastName = privateData[0].name.last;
-      mobile = privateData[0].mobile;
-      email = privateData[0].email;
-      location = privateData[0].location;
-      age = privateData[0].age;
+      this.setState({
+        privateData: {
+          firstName: privateData[0].name.first,
+          lastName: privateData[0].name.last,
+          mobile: privateData[0].mobile,
+          email: privateData[0].email,
+          location: privateData[0].location,
+          age: privateData[0].age
+        }
+      });
     } else {
-      firstName = 'unauthorized';
-      lastName = 'unauthorized';
-      mobile = 'unauthorized';
-      email = 'unauthorized';
-      location = 'unauthorized';
-      age = 'unauthorized';
+      this.setState({
+        privateData: {
+          firstName: 'unauthorized',
+          lastName: 'unauthorized',
+          mobile: 'unauthorized',
+          email: 'unauthorized',
+          location: 'unauthorized',
+          age: 'unauthorized'
+        }
+      });
     }
 
-    return { firstName, lastName, mobile, email, location, age, isOwner, myDataSocks, myData, accounts, contractBalance };
-  }
+    if (isOwner) {
   
-  async componentDidMount () {
-    let {myDataSocks} = this.props;
-    let eventDataAccessed = myDataSocks.events.DataAccessed({}, (error, event) => {
-      if (!error) {
-        console.log('DataAccessed: ', event.returnValues.accessor);
-      } else {
-        console.log('DataAccessed error: ', error);
-      }
-
-    });
-    console.log('eventDataAccessed: ', eventDataAccessed);
-
-    let eventReceivedPayment = myDataSocks.events.ReceivedPayment({}, (error, event) => {
-      if (!error) {
-        console.log('ReceivedPayment: ', event.returnValues);
-      } else {
-        console.log('ReceivedPayment error:', error);
-      }
-    });
-    console.log('eventReceivedPayment: ', eventReceivedPayment);
-
-    let passEventsDataAccessed = myDataSocks.getPastEvents('DataAccessed', {
-      filter: {}, 
-      fromBlock: 0,
-      toBlock: 'latest'
-    }, (error, events) => {
-      if (!error) {
-        console.log('passEventsDataAccessed: ', events);
-      } else {
-        console.log('passEventsDataAccessed Error: ', error);
-      }
-    });
-    console.log('passEventsDataAccessed: ', passEventsDataAccessed);
-
-    let passEventsReceivedPayment = myDataSocks.getPastEvents('ReceivedPayment', {
-      filter: {}, 
-      fromBlock: 0,
-      toBlock: 'latest'
-    }, (error, events) => {
-      if (!error) {
-        console.log('passEventsReceivedPayment: ', events);
-      } else {
-        console.log('passEventsReceivedPayment Error: ', error);
-      }
-    });
-    console.log('passEventsReceivedPayment: ', passEventsReceivedPayment);
+      let eventReceivedPayment = myDataSocks.events.ReceivedPayment({}, (error, event) => {
+        if (!error) {
+          console.log('ReceivedPayment: ', event.returnValues);
+        } else {
+          console.log('ReceivedPayment error:', error);
+        }
+      });
+      console.log('eventReceivedPayment: ', eventReceivedPayment);
+  
+      let passEventsReceivedPayment = myDataSocks.getPastEvents('ReceivedPayment', {
+        filter: {}, 
+        fromBlock: 0,
+        toBlock: 'latest'
+      }, (error, events) => {
+        if (!error) {
+          console.log('passEventsReceivedPayment: ', events);
+        } else {
+          console.log('passEventsReceivedPayment Error: ', error);
+        }
+      });
+      console.log('passEventsReceivedPayment: ', passEventsReceivedPayment);
+    }
   }
 
   onTransfer = async () => {
@@ -122,7 +117,7 @@ class privateData extends Component {
     } catch (error) {
       console.log('Transfer to owner error: ',error)
     }
-    this.setState({loading: false});
+    this.setState({loading: false});  
   }
 
   renderCard() {
@@ -133,23 +128,24 @@ class privateData extends Component {
       email,
       location,
       age
-    } = this.props;
+    } = this.state.privateData;
 
-    return <Card>
-      <Card.Content header={`${firstName} ${lastName}`}/>
-      <Card.Content meta={location}/>
-      <Card.Content description={`Age: ${age}`}/>
-      <Card.Content extra>
-        <p>Mobile: {mobile}</p>
-        <p>email: {email}</p>
-      </Card.Content>
-    </Card>
-
+    return (
+      <Card>
+        <Card.Content header={`${firstName} ${lastName}`}/>
+        <Card.Content meta={location}/>
+        <Card.Content description={`Age: ${age}`}/>
+        <Card.Content extra>
+          <p>Mobile: {mobile}</p>
+          <p>email: {email}</p>
+        </Card.Content>
+      </Card>
+    )
   }
 
   render() {
     let ownerUI;
-    if (this.props.isOwner) {
+    if (this.state.isOwner) {
       ownerUI = (
         <Container>
           <Divider/>

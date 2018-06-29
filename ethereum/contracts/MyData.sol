@@ -23,7 +23,6 @@ contract MyDataFactory {
 
 
 contract MyData {
-    event DataAccessed(address accessor);
     event ReceivedPayment(uint payment, address fromAcct);
 
     uint public minimumPayment;
@@ -59,13 +58,16 @@ contract MyData {
         approvedAccessors[msg.sender] = true;
     }
     
+    function removeAccess(address accessor) public {
+        approvedAccessors[accessor] = false;
+    }
+
     function isApprovedAccessor(address accessor) public view returns (bool) {
         return (approvedAccessors[accessor]);
     }
 
     function getPrivateData() public returns (bytes32) {
         if (approvedAccessors[msg.sender] == true) {
-            emit DataAccessed(msg.sender);
             return (privateDataKey);
         } else {
             return ("unauthorized");

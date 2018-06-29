@@ -5,7 +5,7 @@ import MyDataFactory from './build/MyDataFactory.json';
 console.log('Getting address from: ', process.env.LOCATION);
 const instance = new web3.eth.Contract (
   JSON.parse(MyDataFactory.interface),
-  '0xFd0b450a32b381B722beE14a613F120FE0109A4e'
+  '0x40292e639cB2685E5AbBe4a26AE913A0393aD877'
 );
 
 export default instance;

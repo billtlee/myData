@@ -1,7 +1,8 @@
 const routes = require('next-routes')();
 
 routes
-  .add('/mydata/:address/interests', 'mydata/interests')
-  .add('/mydata/:address/privatedata', 'mydata/privatedata');
+  .add('privatedata','/mydata/:address/privatedata/:key', 'mydata/privatedata')
+  .add('interests','/mydata/:address/interests', 'mydata/interests');
+
 
 module.exports = routes;

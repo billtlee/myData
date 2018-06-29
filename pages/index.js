@@ -6,7 +6,7 @@ import factory from '../ethereum/factory';
 import MyData from '../ethereum/myData';
 import web3 from '../ethereum/web3';
 import Layout from '../components/Layout';
-import { Link } from '../routes';
+import { Link, Router } from '../routes';
 
 class MyDataIndex extends Component {
   state = {
@@ -75,22 +75,41 @@ class MyDataIndex extends Component {
     const accounts = await web3.eth.getAccounts();
     const owner = await myData.methods.owner().call();
     if (accounts[0]!==owner){
+      console.log('not owner', minPrice);
       this.setState({ loading: true, errorMessage: '' });
       const minPrice = await myData.methods.minimumPayment().call();
-      console.log('not owner', minPrice);
       try {
         await myData.methods.getAccess().send({
           from: accounts[0],
           value: minPrice
         });
       } catch (error) {
+        this.setState({ loading: false, value: '' });
         this.setState({ errorMessage: error.message });
+        return;
       }
-      this.setState({ loading: false, value: '' });
     } else {
       console.log('owner');
     }
+    const privateDataKey = web3.utils.hexToAscii(await myData.methods.getPrivateData().call({
+      from: accounts[0]
+    }));
+    Router.pushRoute(`/mydata/${address}/privatedata/${privateDataKey}`);
   }
+
+  // onGetPrivateData = async (address) => {
+  //   const myData = MyData(address);
+  //   const accounts = await web3.eth.getAccounts();
+  //   const accessor = await myData.methods.isApprovedAccessor(accounts[0]).call();
+  //   if (accessor){
+  //     const privateDataKey = web3.utils.hexToAscii(await myData.methods.getPrivateData().call({
+  //       from: accounts[0]
+  //     }));
+  //     Router.pushRoute(`/mydata/${address}/privatedata/${privateDataKey}`);
+  //   } else {
+  //     Router.pushRoute(`/mydata/${address}/unauthorized/privatedata`)
+  //   }
+  // }
 
   renderRow() {
     const { Row, Cell } = Table;
@@ -103,15 +122,15 @@ class MyDataIndex extends Component {
               <Button color="green" basic 
                 loading={this.state.loading} 
                 onClick={this.onGetAccess.bind(this, address)}
-                >Pay
+                >View
               </Button>
             </Cell>
-            <Cell>
-              <Button color="teal" basic>
-                <Link route = {`/mydata/${address}/privatedata`}><a>View</a>
-                </Link>
+            {/* <Cell>
+              <Button color="teal" basic
+                onClick={this.onGetPrivateData.bind(this,address)}
+                >View
               </Button>
-            </Cell>
+            </Cell> */}
           </Row>
         )
     })
@@ -136,8 +155,8 @@ class MyDataIndex extends Component {
             <Row>
               <HeaderCell>Address</HeaderCell>
               <HeaderCell>Min Price for Data (Ether)</HeaderCell>
-              <HeaderCell>Authorization</HeaderCell>
               <HeaderCell>Private Data</HeaderCell>
+              {/* <HeaderCell>Private Data</HeaderCell> */}
             </Row>
           </Header>
           <Body>

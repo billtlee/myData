@@ -29,6 +29,8 @@ co(function* () {
   });
   server.use('/api', api(db));
 
+  server.use(handler);
+  
   server.get('*', (req, res) => {
     return handler(req, res);
   });
