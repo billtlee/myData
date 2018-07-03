@@ -31,7 +31,7 @@
     "lodash": "^4.17.10",
     "mocha": "^5.1.1",
     "mongodb": "^3.1.0-beta4",
-    "next": "6.0.3",
+    "next": "6.1.1",
     "next-routes": "1.4.2",
     "react": "^16.3.2",
     "react-dom": "^16.3.2",

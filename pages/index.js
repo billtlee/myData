@@ -1,9 +1,12 @@
 import React, { Component } from 'react';
-import { Table, Button, Message, Input } from 'semantic-ui-react';
+import { Table, Button, Input } from 'semantic-ui-react';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import * as superagent from 'superagent';
 
 import factory from '../ethereum/factory';
 import MyData from '../ethereum/myData';
+import MyDataSocks from '../ethereum/myDataSocks';
 import web3 from '../ethereum/web3';
 import Layout from '../components/Layout';
 import { Link, Router } from '../routes';
@@ -18,21 +21,46 @@ class MyDataIndex extends Component {
   }
 
   async componentDidMount() {
+    const accounts = await web3.eth.getAccounts();
     const registeredAccounts = await factory.methods.getRegisteredAccounts().call();
 
     let registeredAccountsCost = [];
     let displayState = [];
 
     for (var i=0, len=registeredAccounts.length; i<len; i++) {
-      const minPayment = web3.utils.fromWei(await MyData(registeredAccounts[i]).methods.minimumPayment().call());
+      const myData=MyData(registeredAccounts[i]);
+      const minPayment = web3.utils.fromWei(await myData.methods.minimumPayment().call());
       registeredAccountsCost[i]=minPayment;
       displayState[i]=false;
+      const owner = await myData.methods.owner().call();
+      const isOwner = owner === accounts[0];
+      if (isOwner) {
+        const myDataSocks = MyDataSocks(registeredAccounts[i]);
+
+        myDataSocks.events.ReceivedPayment({}, async (error, event) => {
+          if (!error) {
+            const account = event.returnValues.fromAcct;
+            const payment = web3.utils.fromWei(event.returnValues.payment);
+  
+            console.log('ReceivedPayment: ', account, payment);
+            this.notify(`You received ${payment} ether from ${account}`);  
+          } else {
+            console.log('ReceivedPayment error:', error);
+          }
+        });
+      }
     }
 
     this.setState({
       registeredAccounts,
       registeredAccountsCost,
       displayState
+    });
+  }
+
+  notify = (msg) => {
+    toast.info(msg, {
+      position: toast.POSITION.BOTTOM_RIGHT
     });
   }
 
@@ -141,6 +169,7 @@ class MyDataIndex extends Component {
 
     return (
       <Layout>
+        <ToastContainer autoClose={8000} />
         <h3>Registered Accounts</h3>
         <Input 
           value={this.state.value}

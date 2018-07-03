@@ -92,7 +92,7 @@ class privateData extends Component {
           const payment = web3.utils.fromWei(event.returnValues.payment);
 
           console.log('ReceivedPayment: ', account, payment);
-          this.notify(`You received ${account} ether from ${payment}`);
+          this.notify(`You received ${payment} ether from ${account}`);
 
           let contractBalance;
           await web3.eth.getBalance(address).then(function(result) {
@@ -139,8 +139,7 @@ class privateData extends Component {
         contractBalance = web3.utils.fromWei(result);
       });
       console.log('contract balance: ', contractBalance);
-      
-      this.setState({ contractBalance });
+        this.setState({contractBalance});
     } catch (error) {
       console.log('Transfer to owner error: ',error)
     }
