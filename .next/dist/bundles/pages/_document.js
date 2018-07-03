@@ -67,24 +67,142 @@ module.exports =
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 2);
+/******/ 	return __webpack_require__(__webpack_require__.s = 0);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ "./node_modules/next/dist/pages/_document.js":
+/***/ "./pages/_document.js":
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__("next/document")
+"use strict";
+
+
+var _interopRequireDefault = __webpack_require__("@babel/runtime/helpers/interopRequireDefault");
+
+var _interopRequireWildcard = __webpack_require__("@babel/runtime/helpers/interopRequireWildcard");
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _classCallCheck2 = _interopRequireDefault(__webpack_require__("@babel/runtime/helpers/classCallCheck"));
+
+var _createClass2 = _interopRequireDefault(__webpack_require__("@babel/runtime/helpers/createClass"));
+
+var _possibleConstructorReturn2 = _interopRequireDefault(__webpack_require__("@babel/runtime/helpers/possibleConstructorReturn"));
+
+var _inherits2 = _interopRequireDefault(__webpack_require__("@babel/runtime/helpers/inherits"));
+
+var _react = _interopRequireDefault(__webpack_require__("react"));
+
+var _document = _interopRequireWildcard(__webpack_require__("next/document"));
+
+var _jsxFileName = "/Users/Bill/Documents/ethereum-projects/mydata/pages/_document.js";
+
+var MyDocument =
+/*#__PURE__*/
+function (_Document) {
+  (0, _inherits2.default)(MyDocument, _Document);
+
+  function MyDocument() {
+    (0, _classCallCheck2.default)(this, MyDocument);
+    return (0, _possibleConstructorReturn2.default)(this, (MyDocument.__proto__ || Object.getPrototypeOf(MyDocument)).apply(this, arguments));
+  }
+
+  (0, _createClass2.default)(MyDocument, [{
+    key: "render",
+    value: function render() {
+      return _react.default.createElement("html", {
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 7
+        }
+      }, _react.default.createElement(_document.Head, {
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 8
+        }
+      }, _react.default.createElement("link", {
+        rel: "stylesheet",
+        href: "/_next/static/style.css",
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 9
+        }
+      })), _react.default.createElement("body", {
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 11
+        }
+      }, _react.default.createElement(_document.Main, {
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 12
+        }
+      }), _react.default.createElement(_document.NextScript, {
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 13
+        }
+      })));
+    }
+  }]);
+  return MyDocument;
+}(_document.default);
+
+exports.default = MyDocument;
+
+/***/ }),
+
+/***/ 0:
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__("./pages/_document.js");
 
 
 /***/ }),
 
-/***/ 2:
-/***/ (function(module, exports, __webpack_require__) {
+/***/ "@babel/runtime/helpers/classCallCheck":
+/***/ (function(module, exports) {
 
-module.exports = __webpack_require__("./node_modules/next/dist/pages/_document.js");
+module.exports = require("@babel/runtime/helpers/classCallCheck");
 
+/***/ }),
+
+/***/ "@babel/runtime/helpers/createClass":
+/***/ (function(module, exports) {
+
+module.exports = require("@babel/runtime/helpers/createClass");
+
+/***/ }),
+
+/***/ "@babel/runtime/helpers/inherits":
+/***/ (function(module, exports) {
+
+module.exports = require("@babel/runtime/helpers/inherits");
+
+/***/ }),
+
+/***/ "@babel/runtime/helpers/interopRequireDefault":
+/***/ (function(module, exports) {
+
+module.exports = require("@babel/runtime/helpers/interopRequireDefault");
+
+/***/ }),
+
+/***/ "@babel/runtime/helpers/interopRequireWildcard":
+/***/ (function(module, exports) {
+
+module.exports = require("@babel/runtime/helpers/interopRequireWildcard");
+
+/***/ }),
+
+/***/ "@babel/runtime/helpers/possibleConstructorReturn":
+/***/ (function(module, exports) {
+
+module.exports = require("@babel/runtime/helpers/possibleConstructorReturn");
 
 /***/ }),
 
@@ -92,6 +210,13 @@ module.exports = __webpack_require__("./node_modules/next/dist/pages/_document.j
 /***/ (function(module, exports) {
 
 module.exports = require("next/document");
+
+/***/ }),
+
+/***/ "react":
+/***/ (function(module, exports) {
+
+module.exports = require("react");
 
 /***/ })
 

@@ -67,7 +67,7 @@ module.exports =
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 3);
+/******/ 	return __webpack_require__(__webpack_require__.s = 4);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -264,7 +264,7 @@ var _MyDataFactory = _interopRequireDefault(__webpack_require__("./ethereum/buil
 __webpack_require__("./config/config.js");
 
 console.log('Getting address from: ', process.env.LOCATION);
-var instance = new _web.default.eth.Contract(JSON.parse(_MyDataFactory.default.interface), '0x40292e639cB2685E5AbBe4a26AE913A0393aD877');
+var instance = new _web.default.eth.Contract(JSON.parse(_MyDataFactory.default.interface), '0xB4c7010911F07594e6D031266EAeaAE96BA31C4b');
 var _default = instance;
 exports.default = _default;
 
@@ -820,7 +820,7 @@ module.exports = routes;
 
 /***/ }),
 
-/***/ 3:
+/***/ 4:
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = __webpack_require__("./pages/index.js");

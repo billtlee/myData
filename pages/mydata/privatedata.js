@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
+import { Container, Divider, Card, Button } from 'semantic-ui-react';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import MyData from '../../ethereum/myData';
 import MyDataSocks from '../../ethereum/myDataSocks';
-import { Container, Divider, Card, Button } from 'semantic-ui-react';
 import * as superagent from 'superagent';
 
 import Layout from '../../components/Layout';
@@ -84,36 +86,61 @@ class privateData extends Component {
 
     if (isOwner) {
   
-      let eventReceivedPayment = myDataSocks.events.ReceivedPayment({}, (error, event) => {
+      myDataSocks.events.ReceivedPayment({}, async (error, event) => {
         if (!error) {
-          console.log('ReceivedPayment: ', event.returnValues);
+          const account = event.returnValues.fromAcct;
+          const payment = web3.utils.fromWei(event.returnValues.payment);
+
+          console.log('ReceivedPayment: ', account, payment);
+          this.notify(`You received ${account} ether from ${payment}`);
+
+          let contractBalance;
+          await web3.eth.getBalance(address).then(function(result) {
+            contractBalance = web3.utils.fromWei(result);
+          });
+
+          this.setState({ contractBalance });
+
         } else {
           console.log('ReceivedPayment error:', error);
         }
       });
-      console.log('eventReceivedPayment: ', eventReceivedPayment);
   
-      let passEventsReceivedPayment = myDataSocks.getPastEvents('ReceivedPayment', {
-        filter: {}, 
-        fromBlock: 0,
-        toBlock: 'latest'
-      }, (error, events) => {
-        if (!error) {
-          console.log('passEventsReceivedPayment: ', events);
-        } else {
-          console.log('passEventsReceivedPayment Error: ', error);
-        }
-      });
-      console.log('passEventsReceivedPayment: ', passEventsReceivedPayment);
+      // let passEventsReceivedPayment = myDataSocks.getPastEvents('ReceivedPayment', {
+      //   filter: {}, 
+      //   fromBlock: 0,
+      //   toBlock: 'latest'
+      // }, (error, events) => {
+      //   if (!error) {
+      //     console.log('passEventsReceivedPayment: ', events);
+      //   } else {
+      //     console.log('passEventsReceivedPayment Error: ', error);
+      //   }
+      // });
     }
+  }
+
+  notify = (msg) => {
+    toast.info(msg, {
+      position: toast.POSITION.BOTTOM_RIGHT
+    });
   }
 
   onTransfer = async () => {
     this.setState({loading: true});
     try {
+      const accounts = await web3.eth.getAccounts();
       await this.props.myData.methods.transferBalanceToOwner().send({
-        from: this.props.accounts[0]
+        from: accounts[0]
       });
+
+      let contractBalance;
+      await web3.eth.getBalance(this.props.address).then(function(result) {
+        contractBalance = web3.utils.fromWei(result);
+      });
+      console.log('contract balance: ', contractBalance);
+      
+      this.setState({ contractBalance });
     } catch (error) {
       console.log('Transfer to owner error: ',error)
     }
@@ -157,6 +184,7 @@ class privateData extends Component {
 
     return(
       <Layout>
+        <ToastContainer autoClose={8000} />
         <Link route="/">
           <a>Back</a>
         </Link>
