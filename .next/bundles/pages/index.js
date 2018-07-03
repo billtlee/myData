@@ -1,7 +1,7 @@
 module.exports =
 __NEXT_REGISTER_PAGE('/', function() {
           var comp =
-      webpackJsonp([5],{
+      webpackJsonp([6],{
 
 /***/ "./components/Header.js":
 /***/ (function(module, exports, __webpack_require__) {
@@ -180,7 +180,7 @@ module.exports = {"assembly":{".code":[{"begin":28,"end":705,"name":"PUSH","valu
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-/* WEBPACK VAR INJECTION */(function(process) {
+
 
 var _interopRequireDefault = __webpack_require__("./node_modules/@babel/runtime/helpers/interopRequireDefault.js");
 
@@ -195,11 +195,9 @@ var _MyDataFactory = _interopRequireDefault(__webpack_require__("./ethereum/buil
 
 __webpack_require__("./config/config.js");
 
-console.log('Getting address from: ', process.env.LOCATION);
-var instance = new _web.default.eth.Contract(JSON.parse(_MyDataFactory.default.interface), '0xB4c7010911F07594e6D031266EAeaAE96BA31C4b');
+var instance = new _web.default.eth.Contract(JSON.parse(_MyDataFactory.default.interface), '0x808C1E244f87Bf20835aE33a65FD6e4453917aD9');
 var _default = instance;
 exports.default = _default;
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__("./node_modules/process/browser.js")))
 
 /***/ }),
 
@@ -303,7 +301,7 @@ exports.default = void 0;
 var _web = _interopRequireDefault(__webpack_require__("./node_modules/web3/src/index.js"));
 
 var web3Socks;
-var provider = new _web.default.providers.WebsocketProvider('ws://localhost:8545');
+var provider = new _web.default.providers.WebsocketProvider('wss://rinkeby.infura.io/ws');
 web3Socks = new _web.default(provider);
 var _default = web3Socks;
 exports.default = _default;
@@ -101865,9 +101863,11 @@ function (_Component) {
       enumerable: true,
       writable: true,
       value: function value(msg) {
-        _reactToastify.toast.info(msg, {
-          position: _reactToastify.toast.POSITION.BOTTOM_RIGHT
-        });
+        if (!_reactToastify.toast.isActive(_this.toastId)) {
+          _reactToastify.toast.info(msg, {
+            position: _reactToastify.toast.POSITION.BOTTOM_RIGHT
+          });
+        }
       }
     }), Object.defineProperty((0, _assertThisInitialized2.default)(_this), "onMatch", {
       configurable: true,
@@ -102201,33 +102201,33 @@ function (_Component) {
           key: i,
           __source: {
             fileName: _jsxFileName,
-            lineNumber: 146
+            lineNumber: 148
           }
         }, _react.default.createElement(Cell, {
           __source: {
             fileName: _jsxFileName,
-            lineNumber: 147
+            lineNumber: 149
           }
         }, _react.default.createElement(_routes.Link, {
           route: "/mydata/".concat(address, "/interests"),
           __source: {
             fileName: _jsxFileName,
-            lineNumber: 147
+            lineNumber: 149
           }
         }, _react.default.createElement("a", {
           __source: {
             fileName: _jsxFileName,
-            lineNumber: 147
+            lineNumber: 149
           }
         }, address))), _react.default.createElement(Cell, {
           __source: {
             fileName: _jsxFileName,
-            lineNumber: 148
+            lineNumber: 150
           }
         }, _this3.state.registeredAccountsCost[i]), _react.default.createElement(Cell, {
           __source: {
             fileName: _jsxFileName,
-            lineNumber: 149
+            lineNumber: 151
           }
         }, _react.default.createElement(_semanticUiReact.Button, {
           color: "green",
@@ -102236,7 +102236,7 @@ function (_Component) {
           onClick: _this3.onGetAccess.bind(_this3, address),
           __source: {
             fileName: _jsxFileName,
-            lineNumber: 150
+            lineNumber: 152
           }
         }, "View")));
       });
@@ -102253,18 +102253,18 @@ function (_Component) {
       return _react.default.createElement(_Layout.default, {
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 171
+          lineNumber: 173
         }
       }, _react.default.createElement(_reactToastify.ToastContainer, {
         autoClose: 8000,
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 172
+          lineNumber: 174
         }
       }), _react.default.createElement("h3", {
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 173
+          lineNumber: 175
         }
       }, "Registered Accounts"), _react.default.createElement(_semanticUiReact.Input, {
         value: this.state.value,
@@ -102276,49 +102276,49 @@ function (_Component) {
         labelPosition: "left",
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 174
+          lineNumber: 176
         }
       }), _react.default.createElement(_semanticUiReact.Button, {
         primary: true,
         onClick: this.onMatch,
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 179
+          lineNumber: 181
         }
       }, "Match Interests"), _react.default.createElement(_semanticUiReact.Table, {
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 182
+          lineNumber: 184
         }
       }, _react.default.createElement(Header, {
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 183
+          lineNumber: 185
         }
       }, _react.default.createElement(Row, {
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 184
+          lineNumber: 186
         }
       }, _react.default.createElement(HeaderCell, {
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 185
+          lineNumber: 187
         }
       }, "Address"), _react.default.createElement(HeaderCell, {
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 186
+          lineNumber: 188
         }
       }, "Min Price for Data (Ether)"), _react.default.createElement(HeaderCell, {
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 187
+          lineNumber: 189
         }
       }, "Private Data"))), _react.default.createElement(Body, {
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 191
+          lineNumber: 193
         }
       }, this.renderRow())));
     }
@@ -102362,14 +102362,6 @@ module.exports = routes;
 
 /***/ }),
 
-/***/ 4:
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = __webpack_require__("./pages/index.js");
-
-
-/***/ }),
-
 /***/ 5:
 /***/ (function(module, exports) {
 
@@ -102396,9 +102388,17 @@ module.exports = __webpack_require__("./pages/index.js");
 
 /* (ignored) */
 
+/***/ }),
+
+/***/ 9:
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__("./pages/index.js");
+
+
 /***/ })
 
-},[4])
+},[9])
           return { page: comp.default }
         })
       ;

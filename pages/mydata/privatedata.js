@@ -121,9 +121,11 @@ class privateData extends Component {
   }
 
   notify = (msg) => {
-    toast.info(msg, {
-      position: toast.POSITION.BOTTOM_RIGHT
-    });
+    if (! toast.isActive(this.toastId)) {
+      toast.info(msg, {
+        position: toast.POSITION.BOTTOM_RIGHT
+      });
+    }
   }
 
   onTransfer = async () => {
