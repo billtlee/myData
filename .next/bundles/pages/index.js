@@ -1,7 +1,7 @@
 module.exports =
 __NEXT_REGISTER_PAGE('/', function() {
           var comp =
-      webpackJsonp([6],{
+      webpackJsonp([5],{
 
 /***/ "./components/Header.js":
 /***/ (function(module, exports, __webpack_require__) {
@@ -102261,10 +102261,37 @@ function (_Component) {
           fileName: _jsxFileName,
           lineNumber: 174
         }
-      }), _react.default.createElement("h3", {
+      }), _react.default.createElement(_semanticUiReact.Container, {
         __source: {
           fileName: _jsxFileName,
           lineNumber: 175
+        }
+      }, _react.default.createElement("p", {
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 176
+        }
+      }, "Welcome to ipseity.network.  This demo is designed to show how you can share your personal information in exchange for Ethereum. It is currently running on the Rinkeby test network.  In order to use this demo, you have to first install the ", _react.default.createElement("a", {
+        href: "https://metamask.io/",
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 178
+        }
+      }, "Metamask"), " plugin onto your browser.  Once you have the Metamask plugin, you can connect to the Rinkeby network.  You can first obtain some test Ether from the ", _react.default.createElement("a", {
+        href: "https://faucet.rinkeby.io/",
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 180
+        }
+      }, "Rinkeby faucet"), ".  With the test ether, you can click on the plus sign on the upper right to get to the registration page to register.  After registration, you can click on your contract address to update your interests for matching."), _react.default.createElement("p", {
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 183
+        }
+      }, "On this screen you will see a list of registered accounts.  By entering comma separated terms into the search box, you can filter interests on the list.  To access personal data of the targeted account, simply click on the view button and click send in metamask to send ether to that account.")), _react.default.createElement("h3", {
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 188
         }
       }, "Registered Accounts"), _react.default.createElement(_semanticUiReact.Input, {
         value: this.state.value,
@@ -102276,49 +102303,49 @@ function (_Component) {
         labelPosition: "left",
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 176
+          lineNumber: 189
         }
       }), _react.default.createElement(_semanticUiReact.Button, {
         primary: true,
         onClick: this.onMatch,
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 181
+          lineNumber: 194
         }
       }, "Match Interests"), _react.default.createElement(_semanticUiReact.Table, {
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 184
+          lineNumber: 197
         }
       }, _react.default.createElement(Header, {
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 185
+          lineNumber: 198
         }
       }, _react.default.createElement(Row, {
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 186
+          lineNumber: 199
         }
       }, _react.default.createElement(HeaderCell, {
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 187
+          lineNumber: 200
         }
       }, "Address"), _react.default.createElement(HeaderCell, {
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 188
+          lineNumber: 201
         }
       }, "Min Price for Data (Ether)"), _react.default.createElement(HeaderCell, {
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 189
+          lineNumber: 202
         }
       }, "Private Data"))), _react.default.createElement(Body, {
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 193
+          lineNumber: 206
         }
       }, this.renderRow())));
     }
@@ -102362,6 +102389,14 @@ module.exports = routes;
 
 /***/ }),
 
+/***/ 4:
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__("./pages/index.js");
+
+
+/***/ }),
+
 /***/ 5:
 /***/ (function(module, exports) {
 
@@ -102388,17 +102423,9 @@ module.exports = routes;
 
 /* (ignored) */
 
-/***/ }),
-
-/***/ 9:
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = __webpack_require__("./pages/index.js");
-
-
 /***/ })
 
-},[9])
+},[4])
           return { page: comp.default }
         })
       ;

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Table, Button, Input } from 'semantic-ui-react';
+import { Container, Table, Button, Input } from 'semantic-ui-react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import * as superagent from 'superagent';
@@ -172,6 +172,19 @@ class MyDataIndex extends Component {
     return (
       <Layout>
         <ToastContainer autoClose={8000} />
+        <Container>
+          <p>
+            Welcome to ipseity.network.  This demo is designed to show how you can share your personal information in exchange for Ethereum.
+            It is currently running on the Rinkeby test network.  In order to use this demo, you have to first install the <a href="https://metamask.io/">Metamask</a> plugin
+            onto your browser.  Once you have the Metamask plugin, you can connect to the Rinkeby network.  You can first obtain some test Ether from
+            the <a href="https://faucet.rinkeby.io/">Rinkeby faucet</a>.  With the test ether, you can click on the plus sign on the upper right to get to the
+            registration page to register.  After registration, you can click on your contract address to update your interests for matching.
+          </p>
+          <p>
+            On this screen you will see a list of registered accounts.  By entering comma separated terms into the search box, you can filter interests on the list.  To access
+            personal data of the targeted account, simply click on the view button and click send in metamask to send ether to that account.
+          </p>
+        </Container>
         <h3>Registered Accounts</h3>
         <Input 
           value={this.state.value}
